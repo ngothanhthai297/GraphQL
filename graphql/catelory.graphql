@@ -1,0 +1,62 @@
+input CateloryInput {
+    title: String! @rules(apply: ["required", "unique:catelories,title"])
+    description: String!
+}
+
+type CateloryResponse {
+    data: CateloryPayload!
+    status: CateloryStatuses!
+}
+enum CateloryStatuses {
+    SUCCESS
+}
+
+type CateloryPayload {
+    id:Int
+    title:String
+    description:String
+}
+
+input deleteCateloryInput {
+    id:ID! @rules(apply : ["required"])
+}
+
+type deleteCateloryResponse {
+    data: deleteCateloryPayload!
+    status: deleteCateloryStatuses!
+}
+enum deleteCateloryStatuses {
+    SUCCESS
+}
+
+type deleteCateloryPayload {
+    id:Int
+    title:String
+    description:String
+}
+
+input updateCateloryInput {
+    id:ID! @rules(apply : ["required"])
+    title :String @rules(apply: ["required", "unique:catelories,title"])
+    description:String
+}
+
+type updateCateloryResponse {
+    data: updateCateloryPayload!
+    status: updateCateloryStatuses!
+}
+enum updateCateloryStatuses {
+   SUCCESS
+}
+
+type updateCateloryPayload {
+    id:Int
+    title:String
+    description:String
+}
+
+extend type Mutation {
+    createCatelory(input: CateloryInput @spread): CateloryResponse! @field(resolver: "App\\GraphQL\\Mutations\\AddCatelory@resolve")@guard(with: ["api"])
+    deleteCatelory(input: deleteCateloryInput @spread): deleteCateloryResponse! @field(resolver: "App\\GraphQL\\Mutations\\DeleteCatelory@resolve")@guard(with: ["api"])
+    updateCatelory(input: updateCateloryInput @spread): updateCateloryResponse! @field(resolver: "App\\GraphQL\\Mutations\\UpdateCatelory@resolve")@guard(with: ["api"])
+}
